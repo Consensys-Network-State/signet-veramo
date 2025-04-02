@@ -1,0 +1,39 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug ts-node",
+      "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/ts-node",
+      "runtimeArgs": [
+        "--transpile-only",
+        // if you use esm
+        "--esm"
+      ],
+      // "runtimeExecutable": "node",
+      // "runtimeArgs": ["--nolazy", "-r", "ts-node/register/transpile-only"],
+      // "runtimeArgs":["-r", "ts-node/register"],
+      //"program": "${file}",
+      "program": "${workspaceRoot}/src/create-credential.ts",
+      // "args": [ "${workspaceFolder}/src/create-credential.ts" ],
+      "cwd": "${workspaceRoot}",
+      "internalConsoleOptions": "openOnSessionStart",
+      "skipFiles": ["<node_internals>/**", "node_modules/**"]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug tsx",
+      "runtimeExecutable": "tsx",
+      //"program": "${file}",
+      "program": "${workspaceRoot}/src/create-credential.ts",
+      "cwd": "${workspaceRoot}",
+      "internalConsoleOptions": "openOnSessionStart",
+      // "skipFiles": ["<node_internals>/**", "node_modules/**"]
+    }
+  ]
+}
