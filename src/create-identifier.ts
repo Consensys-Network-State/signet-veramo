@@ -1,8 +1,10 @@
 import { agent } from './veramo/setup.js'
 
 async function main() {
-  const identifier = await agent.didManagerCreate({ alias: 'default' })
-  console.log(`New identifier created`)
+  var args = process.argv.slice(2);
+  let alias = args[0] || 'default';
+  const identifier = await agent.didManagerCreate({ alias })
+  console.log(`New identifier create with the ${alias}`)
   console.log(JSON.stringify(identifier, null, 2))
 }
 

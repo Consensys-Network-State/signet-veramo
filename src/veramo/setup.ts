@@ -1,3 +1,8 @@
+import dotenv from 'dotenv'
+const envConfig = dotenv.config().parsed;
+const KMS_SECRET_KEY = envConfig.KMS_SECRET_KEY;
+const INFURA_PROJECT_ID = envConfig.INFURA_PROJECT_ID
+
 // Core interfaces
 import {
   createAgent,
@@ -38,12 +43,6 @@ import { DataSource } from 'typeorm'
 
 // This will be the name for the local sqlite database for demo purposes
 const DATABASE_FILE = 'database.sqlite'
-
-// You will need to get a project ID from infura https://www.infura.io
-const INFURA_PROJECT_ID = '2PYtcOfHfhBQH7XcpdAYusBRumW'
-
-// This will be the secret key for the KMS (replace this with your secret key)
-const KMS_SECRET_KEY = '65c052a2673b61ab4f1f43cff64e800121cbd5230378d1165ae0d0c585e6dc4b' // TODO: pull from .env
 const dbConnection = new DataSource({
     type: 'sqlite',
     database: DATABASE_FILE,
@@ -56,7 +55,6 @@ const dbConnection = new DataSource({
 
   export const privKeyStore = new PrivateKeyStore(dbConnection, new SecretBox(KMS_SECRET_KEY));
 
-  export const credentialIssuerEIP712 = new CredentialIssuerEIP712();
   export const agent = createAgent<
   IDIDManager & IKeyManager & IDataStore & IDataStoreORM & IResolver & ICredentialPlugin
 >({
@@ -85,7 +83,7 @@ const dbConnection = new DataSource({
       }),
     }),
     new CredentialPlugin(),
-    credentialIssuerEIP712
+    new CredentialIssuerEIP712(),
   ],
 })
 

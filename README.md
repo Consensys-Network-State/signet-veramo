@@ -1,8 +1,34 @@
+### Purpose
+This little repo aims to assist with the setup of a local Veramo agent in order to be able to easily generate samples of well-formed VCs. Veramo libs are doing all of the heavy lifting in terms of supporting different DID methods and VC signature types.
+The project was setup by mostly following this [Veramo guide](https://veramo.io/docs/node_tutorials/node_setup_identifiers/)
+
+### Setup instructions
 Use node v20+
 
 Install deps:
 `npm install`
 
-To generate a credential:
+Generate an encryption key for Veramo to use internally (note the hex value in the output):
+`npx @veramo/cli config create-secret-key`
+
+Create a `.env` file, and supply the following values:
+```
+KMS_SECRET_KEY=<the hex value above>
+INFURA_PROJECT_ID=<our infura projectID>
+```
+
+Create the default identity for Veramo agent to use when generating credentials:
+`npx tsx ./src/create-identifier.ts`
+
+You can create additional identities in order to have multiple credential issuance personas:
+`npx tsx ./src/create-identifier.ts foo`
+`npx tsx ./src/create-identifier.ts bar`
+
+You can list the currently-defined identities like this:
+`npx tsx ./src/list-identifiers.ts`
+
+### How to generate VCs
+To learn how to create VCs, take a look at this script:
 `npx tsx ./src/create-credential.ts`
 
+We'll likely want to keep expanding the library of VC generation scripts to cover the scenarios we care about. For example, we might want to have a script that takes a specific agreement doc, and generates a VC-wrapped version of it, as well as a complete set of VCs representing inputs from agreement participants.

@@ -4,6 +4,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "scripts": {
+    "postinstall": "patch-package"
+  },
   "devDependencies": {
     "patch-package": "^8.0.0",
     "postinstall-postinstall": "^2.1.0",
@@ -21,6 +24,7 @@
     "@veramo/did-resolver": "^6.0.0",
     "@veramo/key-manager": "^6.0.0",
     "@veramo/kms-local": "^6.0.0",
+    "dotenv": "^16.4.7",
     "ethr-did-resolver": "^11.0.2",
     "sqlite3": "^5.1.7",
     "typeorm": "^0.3.20",
