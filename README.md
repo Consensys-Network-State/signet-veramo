@@ -6,9 +6,15 @@ The project was setup by mostly following this [Veramo guide](https://veramo.io/
 Use node v20+
 
 Install deps:
+
 `npm install`
 
+Install the Veramo cli in order to be able to do some things easily, and without writing custom scripts:
+
+`npm -g i @veramo/cli`
+
 Generate an encryption key for Veramo to use internally (note the hex value in the output):
+
 `npx @veramo/cli config create-secret-key`
 
 Create a `.env` file, and supply the following values:
@@ -18,17 +24,21 @@ INFURA_PROJECT_ID=<our infura projectID>
 ```
 
 Create the default identity for Veramo agent to use when generating credentials:
+
 `npx tsx ./src/create-identifier.ts`
 
 You can create additional identities in order to have multiple credential issuance personas:
+
 `npx tsx ./src/create-identifier.ts foo`
 `npx tsx ./src/create-identifier.ts bar`
 
 You can list the currently-defined identities like this:
+
 `npx tsx ./src/list-identifiers.ts`
 
 ### How to generate VCs
 To learn how to create VCs, take a look at this script:
+
 `npx tsx ./src/create-credential.ts`
 
 We'll likely want to keep expanding the library of VC generation scripts to cover the scenarios we care about. For example, we might want to have a script that takes a specific agreement doc, and generates a VC-wrapped version of it, as well as a complete set of VCs representing inputs from agreement participants.
