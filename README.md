@@ -32,3 +32,8 @@ To learn how to create VCs, take a look at this script:
 `npx tsx ./src/create-credential.ts`
 
 We'll likely want to keep expanding the library of VC generation scripts to cover the scenarios we care about. For example, we might want to have a script that takes a specific agreement doc, and generates a VC-wrapped version of it, as well as a complete set of VCs representing inputs from agreement participants.
+
+### Veramo library patches
+There are a few npm library patches we have checked in (under `./patches`) and should be auto-applies during installation:
+- `@veramo/credential-eip712` - adding the ability to explicitly passing EIP-712 model definitions when creating a VC. The default behaviour is to try to auto-generate it based on the credentialSubject data shape, but the vanilla version of the library `eip-712-types-generation` used for this cannot handle non-primitive array types.
+- `eip-712-types-generation` - fixing some bugs + attempting to add support for non-primitive array types during EIP-712 model auto-generation logic. Mainly doing this because their algo is almost there, and would help us to not have to hand-roll these model definitions ourselves. With this patch in place, we have a better shot at auto-genning new versions of the model as our schema changes.
