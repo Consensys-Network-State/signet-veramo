@@ -5,7 +5,7 @@ import { join } from 'path'
 import { fileURLToPath } from 'url'
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
-const agreement2 = JSON.parse(readFileSync(join(__dirname, 'grant-agreement.md.dfsm.json'), 'utf-8'));
+const agreement = JSON.parse(readFileSync(join(__dirname, 'grant-agreement.md.dfsm.json'), 'utf-8'));
 
 function ensureValidationFields(obj: any) {
   if (Array.isArray(obj)) {
@@ -40,7 +40,7 @@ function ensureValidationFields(obj: any) {
 }
 
 // Ensure all validation fields have values
-ensureValidationFields(agreement2);
+ensureValidationFields(agreement);
 
 async function main() {
   const identifier = await agent.didManagerGetByAlias({ alias: 'default' })
@@ -49,7 +49,7 @@ async function main() {
     // the maching credentialSubject
     const credentialSubject = {
       id: "did:example:grant-recipient-1",
-      agreement: agreement2,
+      agreement,
     };
 
     const agreementVc = await agent.createVerifiableCredential({
