@@ -37,8 +37,8 @@ async function main() {
     writeFileSync(join(__dirname, vcFileName), JSON.stringify(agreementVc, null, 2));
     console.log(`Saved VC to ${vcFileName}`);
 
-    // const result2 = await agent.verifyCredential({ credential: agreementVc })
-    // console.log("Verification result: ", result2)
+    const result2 = await agent.verifyCredential({ credential: agreementVc })
+    console.log("Verification result: ", result2)
 
     const partyAVc = await agent.createVerifiableCredential({
       credential: {
@@ -47,6 +47,7 @@ async function main() {
         type: ['VerifiableCredential','AgreementCredential'],
       },
       proofFormat: 'EthereumEip712Signature2021',
+      // now: new Date('2025-04-14T13:55:57.321Z'), // fixing the timestamp to get a consistently hashing output
     });
     // console.log("PartyA VC: ", agreementVc);
     const partyAVcFile = `vc-grant-agreemen-partyA-input.json`;
