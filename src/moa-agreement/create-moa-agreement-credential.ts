@@ -1,13 +1,12 @@
-import { agent } from './veramo/setup.js'
-import { types } from './EIP712-types.js'
+import { agent } from '../veramo/setup.js'
 import { readFileSync, writeFileSync } from 'fs'
 import { join } from 'path'
 import { fileURLToPath } from 'url'
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
-const agreement = JSON.parse(readFileSync(join(__dirname, 'grant-agreement.md.dfsm.json'), 'utf-8'));
-const partyAInput = JSON.parse(readFileSync(join(__dirname, 'grant-agreement-input-partyA.md.dfsm.json'), 'utf-8'));
-const partyBInput = JSON.parse(readFileSync(join(__dirname, 'grant-agreement-input-partyB.md.dfsm.json'), 'utf-8'));
+const agreement = JSON.parse(readFileSync(join(__dirname, 'moa-agreement.md.dfsm.json'), 'utf-8'));
+const partyAInput = JSON.parse(readFileSync(join(__dirname, 'moa-agreement-input-partyA.md.dfsm.json'), 'utf-8'));
+const partyBInput = JSON.parse(readFileSync(join(__dirname, 'moa-agreement-input-partyB.md.dfsm.json'), 'utf-8'));
 
 async function main() {
   const partyA = await agent.didManagerGetByAlias({ alias: 'partyA' })
