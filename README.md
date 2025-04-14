@@ -41,6 +41,10 @@ To learn how to create VCs, take a look at this script:
 
 `npx tsx ./src/create-credential.ts`
 
+The more up-to-date script that tries to generate the MOA agreement VC, plus the downstream input VCs is here::
+
+`npx tsx ./src/moa-agreement/create-moa-credential.ts`
+
 We'll likely want to keep expanding the library of VC generation scripts to cover the scenarios we care about. For example, we might want to have a script that takes a specific agreement doc, and generates a VC-wrapped version of it, as well as a complete set of VCs representing inputs from agreement participants.
 
 ### Veramo library patches
