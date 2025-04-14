@@ -1,0 +1,14 @@
+{
+  "id": "partyBData",
+  "type": "signedFields",
+  "fields": [
+      {
+          "id": "partyBName",
+          "value": "Leif"
+      },
+      {
+          "id": "partyBEthAddress",
+          "value": "0x070b211B08Ec36Ee3AdbB9411296459EbC6CC980"
+      }
+  ]
+}
