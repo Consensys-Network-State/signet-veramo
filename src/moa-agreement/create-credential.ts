@@ -66,7 +66,7 @@ async function main() {
       proofFormat: 'EthereumEip712Signature2021',
       // now: new Date('2025-04-14T13:55:57.321Z'), // fixing the timestamp to get a consistently hashing output
     };
-    await writeVc(partyAInputParams, `${filenamePrefix}partyA-input`);
+    await writeVc(partyAInputParams, `${filenamePrefix}input-partyA`);
 
     const partyBInputParams = {
       credential: {
@@ -76,7 +76,7 @@ async function main() {
       },
       proofFormat: 'EthereumEip712Signature2021',
     };
-    await writeVc(partyBInputParams, `${filenamePrefix}partyB-input`);
+    await writeVc(partyBInputParams, `${filenamePrefix}input-partyB`);
 
     const partyAAcceptParams = {
       credential: {
@@ -86,7 +86,7 @@ async function main() {
       },
       proofFormat: 'EthereumEip712Signature2021',
     };
-    await writeVc(partyAAcceptParams, `${filenamePrefix}partyA-accept-input`);
+    await writeVc(partyAAcceptParams, `${filenamePrefix}input-partyA-accept`);
 
     const partyARejectParams = {
       credential: {
@@ -96,7 +96,7 @@ async function main() {
       },
       proofFormat: 'EthereumEip712Signature2021',
     };
-    await writeVc(partyARejectParams, `${filenamePrefix}partyA-reject-input`);
+    await writeVc(partyARejectParams, `${filenamePrefix}input-partyA-reject`);
   } catch(e) {
     console.error("Error", e)
   }
