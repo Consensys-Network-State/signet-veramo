@@ -1,0 +1,7 @@
+{
+  "id": "partyBData",
+  "type": "signedFields",
+  "values": {
+      "partyBName": "Leif"
+  }
+}
