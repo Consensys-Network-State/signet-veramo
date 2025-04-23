@@ -31,6 +31,7 @@ async function writeVc(params, name) {
 const didStrToEthAddress = didStr => didStr.slice(didStr.lastIndexOf(":") + 1);
 
 async function main() {
+  const agreementCreator = await agent.didManagerGetByAlias({ alias: 'partyC' })
   const partyA = await agent.didManagerGetByAlias({ alias: 'partyA' })
   const partyB = await agent.didManagerGetByAlias({ alias: 'partyB' })
   const partyAEthAddress = didStrToEthAddress(partyA.did);
@@ -40,10 +41,13 @@ async function main() {
     const filenamePrefix = "vc-";
     const agreementParams = {
       credential: {
-        issuer: { id: partyA.did },
+        issuer: { id: agreementCreator.did },
         credentialSubject: {
           id: "did:example:grant-recipient-1",
           agreement: Buffer.from(JSON.stringify(agreement)).toString('base64'),
+          params: {
+            partyAEthAddress,
+          }
         },
         type: ['VerifiableCredential','AgreementCredential'],
       },
