@@ -38,7 +38,7 @@ async function main() {
   const partyBEthAddress = didStrToEthAddress(partyB.did);
 
   try {
-    const filenamePrefix = "vc-";
+    const filenamePrefix = "simple.grant";
     const agreementParams = {
       credential: {
         issuer: { id: agreementCreator.did },
@@ -57,7 +57,7 @@ async function main() {
       // instead of attemping to auto-generate it.
       // eip712Types: types,
     };
-    await writeVc(agreementParams, `${filenamePrefix}agreement.md.dfsm`);
+    await writeVc(agreementParams, `${filenamePrefix}.wrapped`);
 
     // making sure that we're referencing the right Eth address regardless of whose Veramo agent the script is running on
     partyAInput.values.partyBEthAddress = partyBEthAddress;
@@ -70,7 +70,7 @@ async function main() {
       proofFormat: 'EthereumEip712Signature2021',
       // now: new Date('2025-04-14T13:55:57.321Z'), // fixing the timestamp to get a consistently hashing output
     };
-    await writeVc(partyAInputParams, `${filenamePrefix}input-partyA`);
+    await writeVc(partyAInputParams, `${filenamePrefix}.partyA-input.wrapped`);
 
     const partyBInputParams = {
       credential: {
@@ -80,7 +80,7 @@ async function main() {
       },
       proofFormat: 'EthereumEip712Signature2021',
     };
-    await writeVc(partyBInputParams, `${filenamePrefix}input-partyB`);
+    await writeVc(partyBInputParams, `${filenamePrefix}.partyB-input.wrapped`);
 
     const partyAAcceptParams = {
       credential: {
@@ -90,7 +90,7 @@ async function main() {
       },
       proofFormat: 'EthereumEip712Signature2021',
     };
-    await writeVc(partyAAcceptParams, `${filenamePrefix}input-partyA-accept`);
+    await writeVc(partyAAcceptParams, `${filenamePrefix}.partyA-input-accept.wrapped`);
 
     const partyARejectParams = {
       credential: {
@@ -100,7 +100,7 @@ async function main() {
       },
       proofFormat: 'EthereumEip712Signature2021',
     };
-    await writeVc(partyARejectParams, `${filenamePrefix}input-partyA-reject`);
+    await writeVc(partyARejectParams, `${filenamePrefix}.partyA-input-reject.wrapped`);
   } catch(e) {
     console.error("Error", e)
   }
