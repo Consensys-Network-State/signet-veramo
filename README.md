@@ -29,9 +29,11 @@ Create the default identity for Veramo agent to use when generating credentials:
 
 You can create additional identities in order to have multiple credential issuance personas:
 
+```
 `npx tsx ./src/create-identifier.ts partyA`
 `npx tsx ./src/create-identifier.ts partyB`
 `npx tsx ./src/create-identifier.ts partyC`
+```
 
 You can list the currently-defined identities like this:
 
