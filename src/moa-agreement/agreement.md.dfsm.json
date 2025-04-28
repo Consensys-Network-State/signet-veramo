@@ -12,46 +12,33 @@
     "partyAEthAddress": {
       "type": "address",
       "name": "Party A Ethereum Address",
-      "description": "Ethereum address of the first party",
-      "initiallyRequired": true,
-      "validation": {
-        "required": true,
-        "pattern": "^0xB49e45Affd4963374e72f850B6Cae84939e58F78$"
-      }
+      "description": "Ethereum address of the first party"
     },
     "partyAName": {
       "type": "string",
       "name": "Party A Name",
       "description": "Legal name of the first party",
       "validation": {
-        "required": true,
         "minLength": 1
       }
     },
     "partyBEthAddress": {
       "type": "address",
       "name": "Party B Ethereum Address",
-      "description": "Ethereum address of the second party",
-      "validation": {
-        "required": true
-      }
+      "description": "Ethereum address of the second party"
     },
     "partyBName": {
       "type": "string",
       "name": "Party A Name",
       "description": "Legal name of the second party",
       "validation": {
-        "required": true,
         "minLength": 1
       }
     },
     "effectiveDate": {
       "type": "dateTime",
       "name": "Effective Date",
-      "description": "The date when this MOU becomes effective",
-      "validation": {
-        "required": true
-      }
+      "description": "The date when this MOU becomes effective"
     }
   },
   "content": {
@@ -63,7 +50,10 @@
       "PENDING_PARTY_A_SIGNATURE": {
         "name": "Pending Signature From A",
         "description": "This state awaits until Party A supplies Party B's address along with their own name.",
-        "isInitial": true
+        "isInitial": true,
+        "initialParams": {
+          "partyAEthAddress": "${variables.partyAEthAddress}"
+        }
       },
       "PENDING_PARTY_B_SIGNATURE": {
         "name": "Pending Signature From B",
