@@ -1,0 +1,7 @@
+{
+  "id": "accepted",
+  "type": "signedFields",
+  "values": {
+      "partyAAcceptance": "ACCEPTED"
+  }
+}
