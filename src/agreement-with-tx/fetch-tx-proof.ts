@@ -347,9 +347,23 @@ async function main() {
     console.log("txHash", txHash);
 
     const proofData = await getTransactionProof(txHash);
+
     if (proofData) {
       const isValid = await verifyTransactionProof(proofData.txHash, proofData.txReceipt.transactionIndex, proofData.block, proofData.txProof, proofData.txEncodedValue);
       console.log("Proof is valid:", isValid);
+
+      console.log(serializeWithBigInt({
+        TxHash: proofData.txHash,
+        TxRoot: proofData.block.transactionsRoot,
+        TxIndex: proofData.txReceipt.transactionIndex.toString(),
+        TxRaw: proofData.txRaw,
+        TxReceipt: proofData.txReceipt,
+        TxProof: proofData.txProof.map((n) => Array.from(n)),
+        TxEncodedValue: Array.from(proofData.txEncodedValue),
+        ReceiptRoot: proofData.block.receiptsRoot,
+        ReceiptProof: proofData.receiptProof.map((n) => Array.from(n)),
+        ReceiptEncodedValue: Array.from(proofData.receiptEncodedValue)
+      }))
     }
   } catch (error) {
     console.error("Error:", error);
