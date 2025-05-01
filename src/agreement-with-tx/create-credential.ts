@@ -2,6 +2,7 @@ import { agent } from '../veramo/setup.js'
 import fs, { readFileSync, writeFileSync } from 'fs'
 import { join } from 'path'
 import { fileURLToPath } from 'url'
+import { getTransactionProof, stringifyProofData } from './fetch-tx-proof.js'
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
 const outputDirName = "output";
@@ -14,6 +15,7 @@ const partyAInput = JSON.parse(readFileSync(join(__dirname, 'input-partyA.json')
 const partyBInput = JSON.parse(readFileSync(join(__dirname, 'input-partyB.json'), 'utf-8'));
 const partyAAcceptInput = JSON.parse(readFileSync(join(__dirname, 'input-partyA-accept.json'), 'utf-8'));
 const partyARejectInput = JSON.parse(readFileSync(join(__dirname, 'input-partyA-reject.json'), 'utf-8'));
+const txHash = "0x15cdc2d5157685faaca3da6928fe412608747e76a7daee0800d5c79c2b76a0cd";
 
 async function writeVc(params, name) {
   const vc = await agent.createVerifiableCredential(params);
@@ -36,9 +38,13 @@ async function main() {
   const partyB = await agent.didManagerGetByAlias({ alias: 'partyB' })
   const partyAEthAddress = didStrToEthAddress(partyA.did);
   const partyBEthAddress = didStrToEthAddress(partyB.did);
+  const proofData = await getTransactionProof(txHash);
+  const proofDataStr = await stringifyProofData(proofData);
+  const proofDataBase64 = btoa(proofDataStr);
 
   try {
     const filenamePrefix = "grant-with-tx";
+
     const agreementParams = {
       credential: {
         issuer: { id: agreementCreator.did },
@@ -46,7 +52,10 @@ async function main() {
           id: "did:example:grant-recipient-1",
           agreement: Buffer.from(JSON.stringify(agreement)).toString('base64'),
           params: {
-            partyAEthAddress,
+            partyAEthAddress: partyAEthAddress,
+            grantRecipientAddress: "0xBe32388C134a952cdBCc5673E93d46FfD8b85065",
+            grantAmount: 100,
+            tokenAllocatorAddress: "0xB47855e843c4F9D54408372DA4CA79D20542d168",
           }
         },
         type: ['VerifiableCredential','AgreementCredential'],
@@ -101,6 +110,18 @@ async function main() {
       proofFormat: 'EthereumEip712Signature2021',
     };
     await writeVc(partyARejectParams, `${filenamePrefix}.partyA-input-reject.wrapped`);
+
+    const txProofVcParams = {
+      credential: {
+        issuer: { id: partyA.did },
+        credentialSubject: {
+          txProof: proofDataBase64,
+        },
+        type: ['VerifiableCredential','AgreementInputCredential'],
+      },
+      proofFormat: 'EthereumEip712Signature2021',
+    };
+    await writeVc(txProofVcParams, `${filenamePrefix}.partyA-tx-proof.wrapped`);
   } catch(e) {
     console.error("Error", e)
   }
