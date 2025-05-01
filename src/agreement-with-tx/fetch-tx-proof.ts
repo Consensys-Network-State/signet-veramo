@@ -4,6 +4,10 @@ import { RLP } from "@ethereumjs/rlp";
 import { createTx, createLegacyTx, createFeeMarket1559Tx } from '@ethereumjs/tx';
 import { Common, createCustomCommon, Mainnet } from '@ethereumjs/common';
 
+// patching bigint type to serializse as a string when being stringified
+BigInt.prototype.toJSON = function () {
+  return this.toString();
+};
 
 // const processId = "bLltq4IiXPRxQRVds85Dr4qR8_rto1g1VhLCZyvgaMw";
 // const action = "VerifyTx";
@@ -328,46 +332,67 @@ async function verifyTransactionProof(txHash, transactionIndex, block, proof, va
   }
 }
 
+function selectProofData(proofData) {
+  return {
+    TxHash: proofData.txHash,
+    TxRoot: proofData.block.transactionsRoot,
+    TxIndex: proofData.txReceipt.transactionIndex.toString(),
+    TxRaw: proofData.txRaw,
+    TxReceipt: proofData.txReceipt,
+    TxProof: proofData.txProof.map((n) => Array.from(n)),
+    TxEncodedValue: Array.from(proofData.txEncodedValue),
+    ReceiptRoot: proofData.block.receiptsRoot,
+    ReceiptProof: proofData.receiptProof.map((n) => Array.from(n)),
+    ReceiptEncodedValue: Array.from(proofData.receiptEncodedValue)
+  }
+};
+
+function stringifyProofData(proofData) {
+  return JSON.stringify(selectProofData(proofData));
+};
+
+
+
 let wallet = { "kty": "RSA", "n": "kn9SBUk_TWSxEPi_l8F2nHxMtEW-QVnxituaH9bvRikCzaO8_TcGgVZOSD5Aj8cyUHBYUpEHiTUWUHXzfozH55DTOtY3ZtZnD3z-9iVa6jl9JrPgOzSHpaYxc66CX-ocOv7wnQXKFyUdvzXVkm6I4KaLQ8xCNZIbEspr9hXdggclE1dYAiKIdi-GbIfReeJ9FxrWcgI94wQBvdHWpzulp1JoXEOm6w4SHZo9yTBIgP__qD3kR3fQMYiIsYKzug8BmRfJoryzGo0d25eUQVQk0Dx654NUymmJLW7BPIm6jU2AFnSLug3R2TkhcSqUCW416sgFyC6smVU2BJT8ON9ke1KmBtXmiurglKF0rMc2ALdEXX4Mkb6WHThTVBs-bZv4GF7ggPq3dAPxGfRWhQ6jfqIdI65_Wh-VBxO-sxG37ZG6CdGInwkcOlCJYbxOc1dXFmHW5O64MjEepG0jpstHwMmboGtBo7QXLB_PjRzooA8ws6gJFXCpAXSK__FUyQd1dcYEq9uo9zm_ngVfgl6eIQi5EuBDOujr2wm0N_S3Oael9PzvRHWL8Hi23178Cn0PvY5QvI16KaLYPksr90e__CJ7M8P2_8o2Cda2GCSjiQ9a8FI10_Z3B-CCY5lvHHacMJ5uWna0OTSbGkSamPAeV87PBdCJAlvHNnZ5r6p6-Hk", "e": "AQAB", "d": "K6OuyLFVoJXeoyoeVLQGQ75JUSg3cRs8dztMkbCCrXk5Aw4EFcAG-Y8-mYmlzM6vX8Pfo5TdVFOSlpxUUP3Z7NK5AZ1feoxivfvjrWpaR0yhyd4qbSiMQd2cfJPe9Xh1OWPJRFU9qqBdWKDOQqUXtCgYczVNAc1IsFPJTlCcIAhF1Jmft18XHHGyzvC0h2TfE3tkpyigy9fdNvDjywRbJ9lGCjoC5qFV5yiTwDNYXckknLb3Ig0AYUkFQy-mn0WqGbM61vX0OnQQEWJ5gO5yWu-xQvbd0sAWY4jLGmACyOXtwoKsPtuwB8_bdO0UlSyV9h7ojgXNV43JHhtNeRmewiQ-DqQT_Y1qkzhlUZuw4f-JaP18zaj_eRNZv2i8DvYKaTBfSCrqdbAYa0TCYN2aoqppTLjBlt1RkbRJ1gAhmTLmp3Guf4ep5kvQTNi1Ym-a9McN39Tolrs_RIAvIErGrYNPFZ9fT1NHVbu5k2JRPs7Q4G4IiJ9ETqsGEDHyIwOTXn0CJO_SfD3QbdIU84vGm47Orq0g79ICSrEPuQDlsbqVULJc0Dtia6nF7mGIISilbjHn14ox4nZgIQipc4ppPuaBxseP3TpWuWwDBlPFolfoHjMf7n2mibTs6KZ5Ou6oaasXYcr4V4KUlMXczFgb4tr5NAuEHlhXtBu4tGOCwmM", "p": "zTIBZotyL4-L3edonPVcreb8G5tenvChTJZaT5TAuGWZjw3ct7It5wzpG1yS2H8YocNZpY-55l7o9CyPP7C1oT2ja8Q20uxdKIefQb_Or1H2zxx8ghARAd0xmvI3t_di_2GJ-61UM1u4LwhRrQ6LU6JhqT-PV4IfKqNbzuC1WWyYD9SO3KDTR1m_Aq5PjZ2My6zf5mhFjz5yZmi8JHUI98mZLAFZg-Cbg2naTamXG2P1MK7AdLsR0T0miln74w2ZqAwQ1yqHVhK1lZKrAnUmSfolKR6xJgYZ6yrHmIAXPaMn2RRFsktEAiiB6HKGR2VxC2M7q4b-uqLMzPD8mcUDRw", "q": "tsTVA1_f5p7skjafH674wTENImaQJNFaVzBkxbJfkQA6pyPPoXWUVpMK1kQ-QSMx729xliPd5T4hJCWUXSMPTvy7rjlpil-zbyno6b1sFIGCScqO40-7iMCdqYBmsN_dkgrruiXRM_-9M9dNAoUZndAlC3l-IMw4ky8p3j97GZA5lV7oci3BIsvKbe1mIab3a5o7zbcYRWje4WE8xVUweuWAWMmIxuYjBxMLfKwQHlWPSxIaLXWlB7IxUePwDWY59kxD10c85eGmHBaNJtmWr2UAYh-8lWfbbhlY9u-_2Wt7HD0LMlXLFd-ATFkIzknIHQdKcKRWELiDMBVIhniGPw", "dp": "X6BkQrPN3RhaqGmFuVAnhuvUpdD8gbnGkfin0dqTDdxbee2N5RXminzbzeKQlNB2XDy79IpMqm2kxtZVU-s4WhJtrHVez2FT8OVzdKK84bui99ZguARgyKuayIkFKnjh6_463c1jJiQia9jGp43VpH5SYRu7455ChA5pZLoYCbqwCwCWK3_Ptrq-Z7NwY6D-0pSYK7qAYEdL7Sn2NE9OhJuxBG8Elo8AKngUQok8YIlu5Ocrzbq4jPigk21oE-Jsr4If_wZU1-oUMcaOZ7DMzUEEPGuPRxck0RG4vvtC2XjFw0bNTFADO7ZBBGEK7w75ZcMzNbbN05C3PPM55TeJVQ", "dq": "qyMHqo89oj6xmf9XZF18Q7ngaJPM6Qy3IOkJkyyA289xHEwmATON4Lry7Msd1_RSr7aUj1eqURuqAKTHlaZckUOJoYvUzWLrK238z9E0wMa77siinyprmZNyjeLTRU95s2RScg0zJROUYFR7oZ5r7B-YcHQkrCVN3FPPSnH6nGc15C3oTfGV5TUZqXEfruceyjyzPt7w9R1LhZJ9SvGH4avAUGL1lfisV9V3bhfXR_Apqsuag3KjQt-R2vIqNwG_yGaFJ7FmzoJJ_gcHyJb5x-Y1Q6wf8246Q4-shBzecYF412o5b7px3VtYUSUVX8QqgzPueicHB8Ud4gorzO5SFQ", "qi": "xDeip6rYtPdxcB__dt83KjITMAHHLP7YgIjgbecHEbEE8ttsItFquvs_Bfj8KHh8MH6H8Hq0LZ6CcHA0lB62i4vLe7VDJV-EZikEMIageGW4GUTDOIopPbhRd2pUi3Srtc_RqASIEWC4AK27c7l-veJis9vIPJPl7CHkUIQfFrool4tC_QCvcmbDmUAedvcPW1xBx-63Is679TifmdlbBpKeRxYpLh8ciefm2AS8a2Rs2uIXOQ6lLwGHMNCX6QF4KVcX-QCMN_hnpARXipSYHTKyh-kfn3ZtsgSOED_WloQzSixxI-4a5d01i2lMsniTvMou5Xlo5jRjm0Bzy9NVag" }
 
-function serializeWithBigInt(obj) {
-  return JSON.stringify(obj, (key, value) => {
-    // Convert BigInt to string with numeric format
-    if (typeof value === 'bigint') {
-      return value.toString();
-    }
-    return value;
-  });
+export {
+  getTransactionProof,
+  verifyTransactionProof,
+  selectProofData,
+  stringifyProofData,
 }
+
+
 
 // Example usage
-async function main() {
-  try {
+// async function main() {
+//   try {
 
-    console.log("txHash", txHash);
+//     console.log("txHash", txHash);
 
-    const proofData = await getTransactionProof(txHash);
+//     const proofData = await getTransactionProof(txHash);
 
-    if (proofData) {
-      const isValid = await verifyTransactionProof(proofData.txHash, proofData.txReceipt.transactionIndex, proofData.block, proofData.txProof, proofData.txEncodedValue);
-      console.log("Proof is valid:", isValid);
+//     if (proofData) {
+//       const isValid = await verifyTransactionProof(proofData.txHash, proofData.txReceipt.transactionIndex, proofData.block, proofData.txProof, proofData.txEncodedValue);
+//       console.log("Proof is valid:", isValid);
 
-      console.log(serializeWithBigInt({
-        TxHash: proofData.txHash,
-        TxRoot: proofData.block.transactionsRoot,
-        TxIndex: proofData.txReceipt.transactionIndex.toString(),
-        TxRaw: proofData.txRaw,
-        TxReceipt: proofData.txReceipt,
-        TxProof: proofData.txProof.map((n) => Array.from(n)),
-        TxEncodedValue: Array.from(proofData.txEncodedValue),
-        ReceiptRoot: proofData.block.receiptsRoot,
-        ReceiptProof: proofData.receiptProof.map((n) => Array.from(n)),
-        ReceiptEncodedValue: Array.from(proofData.receiptEncodedValue)
-      }))
-    }
-  } catch (error) {
-    console.error("Error:", error);
-  }
-}
+//       console.log(stringifyProofData(proofData));
+//       // console.log(JSON.stringify({
+//       //   TxHash: proofData.txHash,
+//       //   TxRoot: proofData.block.transactionsRoot,
+//       //   TxIndex: proofData.txReceipt.transactionIndex.toString(),
+//       //   TxRaw: proofData.txRaw,
+//       //   TxReceipt: proofData.txReceipt,
+//       //   TxProof: proofData.txProof.map((n) => Array.from(n)),
+//       //   TxEncodedValue: Array.from(proofData.txEncodedValue),
+//       //   ReceiptRoot: proofData.block.receiptsRoot,
+//       //   ReceiptProof: proofData.receiptProof.map((n) => Array.from(n)),
+//       //   ReceiptEncodedValue: Array.from(proofData.receiptEncodedValue)
+//       // }))
+//     }
+//   } catch (error) {
+//     console.error("Error:", error);
+//   }
+// }
 
-main();
+// main();
