@@ -15,6 +15,11 @@
     "typescript": "^5.6.3"
   },
   "dependencies": {
+    "@ethereumjs/common": "^10.0.0",
+    "@ethereumjs/rlp": "^10.0.0",
+    "@ethereumjs/trie": "^6.2.1",
+    "@ethereumjs/tx": "^10.0.0",
+    "@types/node": "^22.15.3",
     "@veramo/core": "^6.0.0",
     "@veramo/credential-eip712": "^6.0.0",
     "@veramo/credential-w3c": "^6.0.0",
@@ -30,6 +35,7 @@
     "pkh-did-resolver": "^2.0.0",
     "sqlite3": "^5.1.7",
     "typeorm": "^0.3.20",
-    "web-did-resolver": "^2.0.27"
+    "web-did-resolver": "^2.0.27",
+    "web3": "^4.16.0"
   }
 }
