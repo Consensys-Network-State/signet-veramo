@@ -2,6 +2,7 @@ import { agent } from '../veramo/setup.js'
 import fs, { readFileSync, writeFileSync } from 'fs'
 import { join } from 'path'
 import { fileURLToPath } from 'url'
+import { ethers } from 'ethers'
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
 const outputDirName = "output";
@@ -23,9 +24,10 @@ async function writeVc(params, name) {
   }
   // console.log("PartyA VC: ", JSON.stringify(vc));
   const filename = `${name}.json`;
-  writeFileSync(join(outputDir, filename), JSON.stringify(vc, null, 2));
+  const vcStr = JSON.stringify(vc, null, 2);
+  writeFileSync(join(outputDir, filename), vcStr);
   console.log(`Saved VC to ./${outputDirName}/${filename}`);
-  return { vc, filename };
+  return { vc, vcStr, filename };
 }
 
 const didStrToEthAddress = didStr => didStr.slice(didStr.lastIndexOf(":") + 1);
@@ -57,7 +59,14 @@ async function main() {
       // instead of attemping to auto-generate it.
       // eip712Types: types,
     };
-    await writeVc(agreementParams, `${filenamePrefix}.wrapped`);
+    const { vcStr: agreementDocStr } = await writeVc(agreementParams, `${filenamePrefix}.wrapped`);
+    const agreementDocHash = ethers.keccak256(new TextEncoder().encode(agreementDocStr));
+
+    // Set the documentHash for all input VCs
+    partyAInput.documentHash = agreementDocHash;
+    partyBInput.documentHash = agreementDocHash;
+    partyAAcceptInput.documentHash = agreementDocHash;
+    partyARejectInput.documentHash = agreementDocHash;
 
     // making sure that we're referencing the right Eth address regardless of whose Veramo agent the script is running on
     partyAInput.values.partyBEthAddress = partyBEthAddress;
