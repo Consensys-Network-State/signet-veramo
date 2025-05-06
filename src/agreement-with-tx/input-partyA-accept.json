@@ -1,5 +1,5 @@
 {
-  "id": "accepted",
+  "inputId": "accepted",
   "type": "signedFields",
   "values": {
       "partyAAcceptance": "ACCEPTED"
