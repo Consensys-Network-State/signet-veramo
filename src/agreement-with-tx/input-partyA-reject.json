@@ -1,7 +1,7 @@
 {
-  "inputId": "rejected",
+  "inputId": "grantorRejection",
   "type": "signedFields",
   "values": {
-      "partyARejection": "REJECTED"
+    "grantorRejectionReason": "Terms do not meet our requirements"
   }
 }

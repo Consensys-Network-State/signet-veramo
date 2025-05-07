@@ -11,7 +11,7 @@ const outputDir = `${__dirname}/${outputDirName}`;
 if (!fs.existsSync(outputDir)){
   fs.mkdirSync(outputDir);
 }
-const agreement = JSON.parse(readFileSync(join(__dirname, 'agreement.md.dfsm.json'), 'utf-8'));
+const agreement = JSON.parse(readFileSync(join(__dirname, 'input.json'), 'utf-8'));
 const partyAInput = JSON.parse(readFileSync(join(__dirname, 'input-partyA.json'), 'utf-8'));
 const partyBInput = JSON.parse(readFileSync(join(__dirname, 'input-partyB.json'), 'utf-8'));
 const partyAAcceptInput = JSON.parse(readFileSync(join(__dirname, 'input-partyA-accept.json'), 'utf-8'));
@@ -54,10 +54,8 @@ async function main() {
           id: "did:example:grant-recipient-1",
           agreement: Buffer.from(JSON.stringify(agreement)).toString('base64'),
           params: {
-            partyAEthAddress: partyAEthAddress,
-            grantRecipientAddress: "0xBe32388C134a952cdBCc5673E93d46FfD8b85065",
-            grantAmount: 100,
-            tokenAllocatorAddress: "0xB47855e843c4F9D54408372DA4CA79D20542d168",
+            grantorEthAddress: partyAEthAddress,
+            recipientEthAddress: "0xBe32388C134a952cdBCc5673E93d46FfD8b85065"
           }
         },
         type: ['VerifiableCredential','AgreementCredential'],

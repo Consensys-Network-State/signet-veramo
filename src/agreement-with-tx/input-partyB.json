@@ -1,7 +1,8 @@
 {
-  "inputId": "partyBData",
+  "inputId": "recipientSigning",
   "type": "signedFields",
   "values": {
-      "partyBName": "Leif"
+    "recipientName": "Leif",
+    "recipientSignature": "0xsignature"
   }
 }
