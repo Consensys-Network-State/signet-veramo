@@ -1,7 +1,7 @@
 {
-  "inputId": "accepted",
+  "inputId": "grantorSigning",
   "type": "signedFields",
   "values": {
-      "partyAAcceptance": "ACCEPTED"
+    "grantorSignature": "0xgrantorsignature"
   }
 }
