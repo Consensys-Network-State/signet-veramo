@@ -59,7 +59,7 @@ async function main() {
           agreement: Buffer.from(JSON.stringify(agreement)).toString('base64'),
           params: {
             grantorEthAddress: grantorEthAddress,
-            recipientEthAddress: "0xBe32388C134a952cdBCc5673E93d46FfD8b85065"
+            recipientEthAddress: recipientEthAddress
           }
         },
         type: ['VerifiableCredential','AgreementCredential'],
@@ -131,7 +131,12 @@ async function main() {
         credentialSubject: {
           inputId: "workTokenSentTx",
           documentHash: agreementDocHash,
-          txProof: proofDataBase64,
+          values: {
+            workTokenSentTx: {
+                value: txHash,
+                proof: proofDataBase64,
+            }
+          },
         },
         type: ['VerifiableCredential','AgreementInputCredential'],
       },
