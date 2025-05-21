@@ -22,7 +22,6 @@ async function writeVc(params, name) {
   if (!isValid) {
     throw new Error(`Generated an invalidl VC given params: ${JSON.stringify(params)}`);
   }
-  // console.log("PartyA VC: ", JSON.stringify(vc));
   const filename = `${name}.json`;
   const vcStr = JSON.stringify(vc, null, 2);
   writeFileSync(join(outputDir, filename), vcStr);
@@ -49,6 +48,7 @@ async function main() {
           agreement: Buffer.from(JSON.stringify(agreement)).toString('base64'),
           params: {
             partyAEthAddress,
+            partyBEthAddress,
           }
         },
         type: ['VerifiableCredential','AgreementCredential'],
